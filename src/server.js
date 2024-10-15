@@ -15,10 +15,7 @@
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Enable CORS for all routes
-    app.use(cors({
-        origin: 'http://localhost:3000', // Allow requests from this origin
-    }));
-
+    app.use(cors({ origin: ["https://atlanticlubes-n46j.vercel.app", "http://localhost:3000"] }));
     app.use(bodyParser.json()); // For parsing application/json
 
     // Base URL for inventory routes
