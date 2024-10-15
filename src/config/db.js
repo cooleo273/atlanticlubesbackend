@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
-import * as pg from 'pg'
+const pg = require('pg');
+
 require('dotenv').config();
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {

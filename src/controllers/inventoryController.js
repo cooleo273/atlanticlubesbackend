@@ -14,7 +14,7 @@ const getAllItems = async (req, res) => {
 const getItemById = async (req, res) => {
     try {
         const { id } = req.params;
-        const item = await Inventory.findByPk(id); // Or `findById` depending on your ORM
+        const item = await Inventory.findByPk(id);
 
         if (!item) {
             return res.status(404).json({ message: 'Item not found' });
@@ -29,39 +29,95 @@ const getItemById = async (req, res) => {
 // Create a new inventory item with image upload
 const createItem = async (req, res) => {
     try {
-      const { 
-        inventory_name, 
-        description, 
-        application,  // Expecting this to be an array
-        performance,  // Expecting this to be an array
-        recommendations, 
-        properties  // Expecting this to be an array
-      } = req.body;
-      
-      const image = req.file ? req.file.path : null;
-  
-      if (!image) {
-        return res.status(400).json({ message: 'No image uploaded' });
-      }
-  
-      const newItem = await Inventory.create({ 
-        inventory_name, 
-        image, 
-        description, 
-        application: application ? JSON.parse(application) : [], // Convert JSON string to array
-        performance: performance ? JSON.parse(performance) : [], // Convert JSON string to array
-        recommendations, 
-        properties: properties ? JSON.parse(properties) : [],  // Convert JSON string to array
-      });
-      
-      res.status(201).json(newItem);
+        const { 
+            inventory_name, 
+            description, 
+            application, 
+            performance, 
+            recommendations, 
+            properties 
+        } = req.body;
+
+        const image = req.file ? req.file.path : null;
+
+        if (!image) {
+            return res.status(400).json({ message: 'No image uploaded' });
+        }
+
+        const newItem = await Inventory.create({
+            inventory_name,
+            image: req.file.path,
+            description,
+            application: application ? JSON.parse(application) : [],
+            performance: performance ? JSON.parse(performance) : [],
+            recommendations,
+            properties: properties ? JSON.parse(properties) : [],
+        });
+
+        res.status(201).json(newItem);
     } catch (error) {
-      res.status(500).json({ message: 'Error creating inventory', error });
+        res.status(500).json({ message: 'Error creating inventory', error });
+    }
+};
+
+// Update an existing inventory item by ID
+const updateItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            inventory_name, 
+            description, 
+            application, 
+            performance, 
+            recommendations, 
+            properties
+        } = req.body;
+
+        const image = req.file ? req.file.path : null;
+
+        const updatedItem = await Inventory.findByPk(id);
+        if (!updatedItem) {
+            return res.status(404).json({ message: 'Item not found' });
+        }
+
+        // Update the fields, including the image if provided
+        await updatedItem.update({
+            inventory_name,
+            description,
+            application: application ? JSON.parse(application) : [],
+            performance: performance ? JSON.parse(performance) : [],
+            recommendations,
+            properties: properties ? JSON.parse(properties) : [],
+            ...(image && { image }), // Only update the image if a new one is uploaded
+        });
+
+        res.json(updatedItem);
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating item', error });
+    }
+};
+
+// Delete an inventory item by ID
+const deleteItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const item = await Inventory.findByPk(id);
+
+        if (!item) {
+            return res.status(404).json({ message: 'Item not found' });
+        }
+
+        await item.destroy();
+        res.json({ message: 'Item deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting item', error });
     }
 };
 
 module.exports = {
     getAllItems,
-    getItemById,  // Export the new function
+    getItemById,
     createItem,
+    updateItem,
+    deleteItem,
 };
