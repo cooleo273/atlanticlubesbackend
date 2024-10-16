@@ -2,6 +2,7 @@
     const cors = require('cors'); // Import CORS package
     const bodyParser = require('body-parser');
     const inventoryRoutes = require('./routes/inventoryRoutes');
+    const categoryRoutes = require('./routes/categoryRoutes');
     const sequelize = require('./config/db'); // Ensure you have sequelize set up correctly
     const { createClient } = require('@supabase/supabase-js'); // Supabase client
     require('dotenv').config();
@@ -20,7 +21,7 @@
 
     // Base URL for inventory routes
     app.use('/api', inventoryRoutes);
-
+    app.use('/api/category', categoryRoutes);
     // User Authentication Routes
     // Sign Up
     app.post('/api/signup', async (req, res) => {

@@ -1,5 +1,7 @@
+// models/Inventory.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const Category = require('./Category'); // Import Category model
 
 const Inventory = sequelize.define('Inventory', {
   inventory_name: {
@@ -15,11 +17,11 @@ const Inventory = sequelize.define('Inventory', {
     allowNull: true,
   },
   application: {
-    type: DataTypes.ARRAY(DataTypes.TEXT), // Array of text for multiple applications
+    type: DataTypes.ARRAY(DataTypes.TEXT),
     allowNull: true,
   },
   performance: {
-    type: DataTypes.ARRAY(DataTypes.TEXT), // Array of text for multiple performance attributes
+    type: DataTypes.ARRAY(DataTypes.TEXT),
     allowNull: true,
   },
   recommendations: {
@@ -27,9 +29,21 @@ const Inventory = sequelize.define('Inventory', {
     allowNull: true,
   },
   properties: {
-    type: DataTypes.ARRAY(DataTypes.TEXT), // Array of text for multiple properties
+    type: DataTypes.ARRAY(DataTypes.TEXT),
     allowNull: true,
   },
+  categoryId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Category,
+      key: 'id', // Foreign key to Category table
+    },
+    allowNull: false, // Ensure every inventory item has a category
+  },
 });
+
+// Establish the relationship
+Inventory.belongsTo(Category, { foreignKey: 'categoryId' });
+Category.hasMany(Inventory, { foreignKey: 'categoryId' });
 
 module.exports = Inventory;
