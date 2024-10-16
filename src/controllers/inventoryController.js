@@ -1,10 +1,20 @@
 const Inventory = require('../models/inventoryModel');
 const Category = require('../models/Category'); // Import Category model
 
-// Get all inventory items
+// Get all inventory items or filter by categoryId
 const getAllItems = async (req, res) => {
     try {
-        const items = await Inventory.findAll({ include: Category }); // Include category data
+        const { categoryId } = req.query; // Get categoryId from query parameters
+        const queryOptions = {
+            include: Category, // Include category data
+        };
+
+        // If categoryId is provided, filter the results
+        if (categoryId) {
+            queryOptions.where = { categoryId }; // Filter by categoryId
+        }
+
+        const items = await Inventory.findAll(queryOptions); // Fetch items based on the query options
         res.json(items);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching inventory', error });
