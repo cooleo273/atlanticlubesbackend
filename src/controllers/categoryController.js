@@ -1,4 +1,5 @@
 const Category = require('../models/Category');
+const Inventory = require('../models/inventoryModel');
 
 // Get all categories
 const getAllCategories = async (req, res) => {
@@ -52,19 +53,22 @@ const updateCategory = async (req, res) => {
 
 // Delete a category by ID
 const deleteCategory = async (req, res) => {
-  try {
     const { id } = req.params;
-    const category = await Category.findByPk(id);
-
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
+    try {
+        // Delete dependent inventories first (if you want to delete them)
+        await Inventory.destroy({ where: { categoryId: id } });
+        
+        // Now delete the category
+        const result = await Category.destroy({ where: { id } });
+        
+        if (!result) {
+            return res.status(404).json({ message: 'Category not found.' });
+        }
+        res.status(200).json({ message: 'Category deleted successfully.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error deleting category', error });
     }
-
-    await category.destroy();
-    res.json({ message: 'Category deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting category', error });
-  }
 };
 
 module.exports = {
