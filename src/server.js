@@ -8,10 +8,10 @@
     require('dotenv').config();
 
     const app = express();
-    const PORT = process.env.PORT || 5000; // Set the port to listen on
+    const PORT = process.env.PORT || 5001; // Set the port to listen on
 
     // Initialize Supabase client
-    const supabaseUrl = 'https://vkqgunmfpvjkftehgtio.supabase.co'; // Replace with your Supabase URL
+    const supabaseUrl = 'https://euflaebxyipiwrhlpqud.supabase.co'; // Replace with your Supabase URL
     const supabaseKey = process.env.SUPABASE_KEY; // Store your Supabase Key in an environment variable
     const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -27,7 +27,7 @@
     app.post('/api/signup', async (req, res) => {
         const { email, password } = req.body;
 
-        const { data, error } = await supabase.auth.signUpWith({
+        const { data, error } = await supabase.auth.signUp({
             email,
             password,
         });
