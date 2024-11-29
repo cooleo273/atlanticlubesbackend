@@ -25,7 +25,7 @@ const Inventory = sequelize.define('Inventory', {
     allowNull: true,
   },
   recommendations: {
-    type: DataTypes.TEXT,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
     allowNull: true,
   },
   properties: {
