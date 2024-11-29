@@ -1,6 +1,5 @@
 const Inventory = require('../models/inventoryModel');
 const Category = require('../models/Category'); // Import Category model
-const { Json } = require('sequelize/lib/utils');
 
 // Get all inventory items or filter by categoryId
 const getAllItems = async (req, res) => {
@@ -69,7 +68,7 @@ const createItem = async (req, res) => {
             description,
             application: application ? JSON.parse(application) : [],
             performance: performance ? JSON.parse(performance) : [],
-            recommendations: recommendations ? JSON.parse(recommendations) : [], 
+            recommendations,
             properties: properties ? JSON.parse(properties) : [],
             categoryId, // Save category association
         });
@@ -115,7 +114,7 @@ const updateItem = async (req, res) => {
             description,
             application: application ? JSON.parse(application) : [],
             performance: performance ? JSON.parse(performance) : [],
-            recommendations: recommendations? JSON.parse(recommendations): [],
+            recommendations,
             properties: properties ? JSON.parse(properties) : [],
             ...(categoryId && { categoryId }), // Update categoryId if provided
             ...(image && { image }), // Only update the image if a new one is uploaded
