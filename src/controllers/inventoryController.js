@@ -70,7 +70,7 @@ const createItem = async (req, res) => {
             tdsFile,
             msdsFile,
             description,
-            application: application ? JSON.parse(application) : [],
+            application: application,
             performance: performance ? JSON.parse(performance) : [],
             recommendations: recommendations ? JSON.parse(recommendations) : [],
             properties: properties ? JSON.parse(properties) : [],

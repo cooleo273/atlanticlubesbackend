@@ -17,7 +17,7 @@ const Inventory = sequelize.define("Inventory", {
     allowNull: true,
   },
   application: {
-    type: DataTypes.ARRAY(DataTypes.TEXT),
+    type: DataTypes.TEXT,
     allowNull: true,
   },
   performance: {
