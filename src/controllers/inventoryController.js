@@ -41,91 +41,96 @@ const getItemById = async (req, res) => {
 // Create a new inventory item with image upload
 const createItem = async (req, res) => {
     try {
-        const { 
-            inventory_name, 
-            description, 
-            application, 
-            performance, 
-            recommendations, 
-            properties,
-            categoryId // Category association
-        } = req.body;
-
-        const image = req.file ? req.file.path : null;
-
-        if (!image) {
-            return res.status(400).json({ message: 'No image uploaded' });
-        }
-
-        // Ensure the category exists
+      const { 
+        inventory_name, 
+        description, 
+        application, 
+        performance, 
+        recommendations, 
+        properties,
+        categoryId
+      } = req.body;
+  
+      const image = req.files.image ? req.files.image[0].path : null;
+      const tdsFile = req.files.tds ? req.files.tds[0].path : null;
+      const msdsFile = req.files.msds ? req.files.msds[0].path : null;
+  
+      if (!image || !tdsFile || !msdsFile) {
+        return res.status(400).json({ message: 'Image, TDS, and MSDS files are required' });
+      }
+  
+      const category = await Category.findByPk(categoryId);
+      if (!category) {
+        return res.status(404).json({ message: 'Category not found' });
+      }
+  
+      const newItem = await Inventory.create({
+        inventory_name,
+        image,
+        tdsFile,
+        msdsFile,
+        description,
+        application: application ? JSON.parse(application) : [],
+        performance: performance ? JSON.parse(performance) : [],
+        recommendations: recommendations ? JSON.parse(recommendations) : [],
+        properties: properties ? JSON.parse(properties) : [],
+        categoryId,
+      });
+  
+      res.status(201).json(newItem);
+    } catch (error) {
+      res.status(500).json({ message: 'Error creating inventory', error });
+    }
+  };
+  
+  const updateItem = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const {
+        inventory_name,
+        description,
+        application,
+        performance,
+        recommendations,
+        properties,
+        categoryId,
+      } = req.body;
+  
+      const image = req.files.image ? req.files.image[0].path : null;
+      const tdsFile = req.files.tds ? req.files.tds[0].path : null;
+      const msdsFile = req.files.msds ? req.files.msds[0].path : null;
+  
+      const updatedItem = await Inventory.findByPk(id);
+      if (!updatedItem) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+  
+      if (categoryId) {
         const category = await Category.findByPk(categoryId);
         if (!category) {
-            return res.status(404).json({ message: 'Category not found' });
+          return res.status(404).json({ message: 'Category not found' });
         }
-
-        const newItem = await Inventory.create({
-            inventory_name,
-            image: req.file.path,
-            description,
-            application: application ? JSON.parse(application) : [],
-            performance: performance ? JSON.parse(performance) : [],
-            recommendations: recommendations ? JSON.parse(recommendations) : [], 
-            properties: properties ? JSON.parse(properties) : [],
-            categoryId, // Save category association
-        });
-
-        res.status(201).json(newItem);
+      }
+  
+      await updatedItem.update({
+        inventory_name,
+        description,
+        application,
+        performance: performance ? JSON.parse(performance) : [],
+        recommendations: recommendations ? JSON.parse(recommendations) : [],
+        properties: properties ? JSON.parse(properties) : [],
+        ...(categoryId && { categoryId }),
+        ...(image && { image }),
+        ...(tdsFile && { tdsFile }),
+        ...(msdsFile && { msdsFile }),
+      });
+  
+      res.json(updatedItem);
     } catch (error) {
-        res.status(500).json({ message: 'Error creating inventory', error });
+      res.status(500).json({ message: 'Error updating item', error });
     }
-};
-
-// Update an existing inventory item by ID
-const updateItem = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const {
-            inventory_name, 
-            description, 
-            application, 
-            performance, 
-            recommendations, 
-            properties,
-            categoryId // Update category if needed
-        } = req.body;
-
-        const image = req.file ? req.file.path : null;
-
-        const updatedItem = await Inventory.findByPk(id);
-        if (!updatedItem) {
-            return res.status(404).json({ message: 'Item not found' });
-        }
-
-        // Ensure the new category exists if provided
-        if (categoryId) {
-            const category = await Category.findByPk(categoryId);
-            if (!category) {
-                return res.status(404).json({ message: 'Category not found' });
-            }
-        }
-
-        // Update the fields, including the image if provided
-        await updatedItem.update({
-            inventory_name,
-            description,
-            application: application ? JSON.parse(application) : [],
-            performance: performance ? JSON.parse(performance) : [],
-            recommendations: recommendations? JSON.parse(recommendations): [],
-            properties: properties ? JSON.parse(properties) : [],
-            ...(categoryId && { categoryId }), // Update categoryId if provided
-            ...(image && { image }), // Only update the image if a new one is uploaded
-        });
-
-        res.json(updatedItem);
-    } catch (error) {
-        res.status(500).json({ message: 'Error updating item', error });
-    }
-};
+  };
+  
 
 // Delete an inventory item by ID
 const deleteItem = async (req, res) => {

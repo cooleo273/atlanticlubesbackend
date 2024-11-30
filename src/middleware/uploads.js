@@ -14,11 +14,22 @@ cloudinary.config({
 // Set up Cloudinary storage
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: "uploads", // The folder in Cloudinary where files will be stored
-    allowed_formats: ["jpg", "png", "jpeg"],
+  params: async (req, file) => {
+    let folder = "uploads";
+    let allowed_formats = ["jpg", "png", "jpeg"];
+
+    if (file.mimetype === "application/pdf") {
+      allowed_formats = ["pdf"];
+      folder = "pdfs"; // Separate folder for PDFs, if preferred
+    }
+
+    return {
+      folder: folder,
+      allowed_formats: allowed_formats,
+    };
   },
 });
+
 
 // Create the multer instance using the Cloudinary storage
 const upload = multer({
