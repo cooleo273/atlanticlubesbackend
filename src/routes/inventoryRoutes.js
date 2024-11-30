@@ -16,10 +16,10 @@ router.get('/inventory', getAllItems);
 router.get('/inventory/:id', getItemById);
 
 // POST a new inventory item
-router.post('/inventory', upload.fields([ { name: 'photo', maxCount: 1 }, { name: 'tds', maxCount: 1 }, { name: 'msds', maxCount: 1 }, ]), createItem);
+router.post('/inventory', upload.fields([ { name: 'image', maxCount: 1 }, { name: 'tds', maxCount: 1 }, { name: 'msds', maxCount: 1 }, ]), createItem);
 
 // PUT (Update) an existing inventory item by ID
-router.put('/inventory/:id', upload.fields([ { name: 'photo', maxCount: 1 }, { name: 'tds', maxCount: 1 }, { name: 'msds', maxCount: 1 }, ]), updateItem);
+router.put('/inventory/:id', upload.fields([ { name: 'image', maxCount: 1 }, { name: 'tds', maxCount: 1 }, { name: 'msds', maxCount: 1 }, ]), updateItem);
 
 // DELETE an inventory item by ID
 router.delete('/inventory/:id', deleteItem);
