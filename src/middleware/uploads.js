@@ -16,12 +16,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
     let folder = "uploads";
-    let allowed_formats = ["jpg", "png", "jpeg"];
-
-    if (file.mimetype === "application/pdf") {
-      allowed_formats = ["pdf"];
-      folder = "pdfs"; // Separate folder for PDFs, if preferred
-    }
+    let allowed_formats = ["jpg", "png", "jpeg", "pdf"];
 
     return {
       folder: folder,

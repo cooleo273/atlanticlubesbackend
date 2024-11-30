@@ -70,7 +70,7 @@ const createItem = async (req, res) => {
             tdsFile,
             msdsFile,
             description,
-            application: application,
+            application,
             performance: performance ? JSON.parse(performance) : [],
             recommendations: recommendations ? JSON.parse(recommendations) : [],
             properties: properties ? JSON.parse(properties) : [],
@@ -80,7 +80,7 @@ const createItem = async (req, res) => {
         res.status(201).json(newItem);
     } catch (error) {
         console.error("Error creating inventory:", error);
-        res.status(500).json({ message: 'Error creating inventory', error });
+        res.status(500).json({ message: error  });
     }
 };
 
