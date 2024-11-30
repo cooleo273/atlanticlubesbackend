@@ -41,47 +41,49 @@ const getItemById = async (req, res) => {
 // Create a new inventory item with image upload
 const createItem = async (req, res) => {
     try {
-      const { 
-        inventory_name, 
-        description, 
-        application, 
-        performance, 
-        recommendations, 
-        properties,
-        categoryId
-      } = req.body;
-  
-      const image = req.files.image ? req.files.image[0].path : null;
-      const tdsFile = req.files.tds ? req.files.tds[0].path : null;
-      const msdsFile = req.files.msds ? req.files.msds[0].path : null;
-  
-      if (!image || !tdsFile || !msdsFile) {
-        return res.status(400).json({ message: 'Image, TDS, and MSDS files are required' });
-      }
-  
-      const category = await Category.findByPk(categoryId);
-      if (!category) {
-        return res.status(404).json({ message: 'Category not found' });
-      }
-  
-      const newItem = await Inventory.create({
-        inventory_name,
-        image,
-        tdsFile,
-        msdsFile,
-        description,
-        application: application ? JSON.parse(application) : [],
-        performance: performance ? JSON.parse(performance) : [],
-        recommendations: recommendations ? JSON.parse(recommendations) : [],
-        properties: properties ? JSON.parse(properties) : [],
-        categoryId,
-      });
-  
-      res.status(201).json(newItem);
+        const { 
+            inventory_name, 
+            description, 
+            application, 
+            performance, 
+            recommendations, 
+            properties,
+            categoryId 
+        } = req.body;
+
+        const image = req.files?.image?.[0]?.path || null;
+        const tdsFile = req.files?.tds?.[0]?.path || null;
+        const msdsFile = req.files?.msds?.[0]?.path || null;
+
+        if (!image || !tdsFile || !msdsFile) {
+            return res.status(400).json({ message: 'Image, TDS, and MSDS files are required' });
+        }
+
+        const category = await Category.findByPk(categoryId);
+        if (!category) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        const newItem = await Inventory.create({
+            inventory_name,
+            image,
+            tdsFile,
+            msdsFile,
+            description,
+            application: application ? JSON.parse(application) : [],
+            performance: performance ? JSON.parse(performance) : [],
+            recommendations: recommendations ? JSON.parse(recommendations) : [],
+            properties: properties ? JSON.parse(properties) : [],
+            categoryId,
+        });
+
+        res.status(201).json(newItem);
     } catch (error) {
-      res.status(500).json({ message: 'Error creating inventory', error });
+        console.error("Error creating inventory:", error);
+        res.status(500).json({ message: 'Error creating inventory', error });
     }
-  };
+};
+
   
   const updateItem = async (req, res) => {
     try {
