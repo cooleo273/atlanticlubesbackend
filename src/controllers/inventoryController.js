@@ -47,7 +47,6 @@ const createItem = async (req, res) => {
             application, 
             performance, 
             recommendations, 
-            properties,
             categoryId 
         } = req.body;
 
@@ -73,7 +72,6 @@ const createItem = async (req, res) => {
             application,
             performance: performance ? JSON.parse(performance) : [],
             recommendations: recommendations ? JSON.parse(recommendations) : [],
-            properties: properties ? JSON.parse(properties) : [],
             categoryId,
         });
 
@@ -94,7 +92,7 @@ const createItem = async (req, res) => {
         application,
         performance,
         recommendations,
-        properties,
+       
         categoryId,
       } = req.body;
   
@@ -120,7 +118,7 @@ const createItem = async (req, res) => {
         application,
         performance: performance ? JSON.parse(performance) : [],
         recommendations: recommendations ? JSON.parse(recommendations) : [],
-        properties: properties ? JSON.parse(properties) : [],
+       
         ...(categoryId && { categoryId }),
         ...(image && { image }),
         ...(tdsFile && { tdsFile }),

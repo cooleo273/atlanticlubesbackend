@@ -28,10 +28,6 @@ const Inventory = sequelize.define("Inventory", {
     type: DataTypes.ARRAY(DataTypes.TEXT),
     allowNull: true,
   },
-  properties: {
-    type: DataTypes.ARRAY(DataTypes.TEXT),
-    allowNull: true,
-  },
   tdsFile: { type: DataTypes.STRING, allowNull: true },
   msdsFile: { type: DataTypes.STRING, allowNull: true },
   categoryId: {
