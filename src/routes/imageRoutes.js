@@ -13,6 +13,8 @@ router.get('/', getAllItems);
 // POST a new inventory item
 router.post('/', upload.fields([ { name: 'image', maxCount: 1 }, { name: 'tds', maxCount: 1 }, { name: 'msds', maxCount: 1 }, ]), createItem);
 
+
+
 // PUT (Update) an existing  item by ID
 
 // DELETE an  item by ID

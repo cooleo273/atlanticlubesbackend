@@ -6,6 +6,7 @@ const {
     getItemById,
     createItem,
     updateItem,
+    getItemsBySlugName,
     deleteItem
 } = require('../controllers/inventoryController');
 
@@ -13,7 +14,9 @@ const {
 router.get('/inventory', getAllItems);
 
 // GET a specific item by ID
-router.get('/inventory/:id', getItemById);
+// router.get('/inventory/:id', getItemById);
+
+router.get('/inventory/:slugName', getItemsBySlugName)
 
 // POST a new inventory item
 router.post('/inventory', upload.fields([ { name: 'image', maxCount: 1 }, { name: 'tds', maxCount: 1 }, { name: 'msds', maxCount: 1 }, ]), createItem);

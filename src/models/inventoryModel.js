@@ -8,6 +8,11 @@ const Inventory = sequelize.define("Inventory", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  inventory__slug: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true, // Ensure every inventory item has a unique slug
+  },
   image: {
     type: DataTypes.STRING,
     allowNull: true,
