@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 5001; // Set the port to listen on
 
 // Initialize Supabase client
-const supabaseUrl = "https://euflaebxyipiwrhlpqud.supabase.co"; // Replace with your Supabase URL
+const supabaseUrl = process.env.SUPABASE_URL; // Replace with your Supabase URL
 const supabaseKey = process.env.SUPABASE_KEY; // Store your Supabase Key in an environment variable
 const supabase = createClient(supabaseUrl, supabaseKey);
 
