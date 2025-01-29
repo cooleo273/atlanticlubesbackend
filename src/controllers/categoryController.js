@@ -4,12 +4,16 @@ const Inventory = require('../models/inventoryModel');
 // Get all categories
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.findAll();
+    const categories = await Category.findAll({
+      order: [['id', 'ASC']], // Order by id in ascending order
+    });
+
     res.json(categories);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching categories', error });
   }
 };
+
 
 // Create a new category with image upload
 const createCategory = async (req, res) => {
