@@ -4,10 +4,13 @@ const crypto = require('crypto');
 
 // Helper function for slug generation
 const generateSlug = (name) => {
-  const shortUUID = crypto.randomBytes(3).toString('hex').substring(0, 5); // 5-character random string
-  return `${name.toLowerCase().replace(/\s+/g, '-')}-${shortUUID}`;
+    const shortUUID = crypto.randomBytes(3).toString('hex').substring(0, 5); // 5-character random string
+    return name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with "-"
+        .replace(/^-+|-+$/g, "") // Remove leading and trailing hyphens
+        .trim() + `-${shortUUID}`;
 };
-
 // Get all inventory items or filter by categoryId
 const getAllItems = async (req, res) => {
   try {
