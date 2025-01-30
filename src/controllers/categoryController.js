@@ -5,7 +5,7 @@ const Inventory = require('../models/inventoryModel');
 const getAllCategories = async (req, res) => {
   try {
     const categories = await Category.findAll({
-      order: [['id', 'ASC']], // Order by id in ascending order
+      order: [['order', 'ASC']], // Order by id in ascending order
     });
 
     res.json(categories);

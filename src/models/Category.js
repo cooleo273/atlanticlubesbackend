@@ -11,6 +11,11 @@ const Category = sequelize.define('Category', {
     type: DataTypes.STRING, // Store the image URL as a string
     allowNull: true, // Optional field
   },
+  order:{
+    type: DataTypes.INTEGER,
+    defaultValue: 0, // Default order is 0 if not provided
+    unique: true, // Ensure each category has a unique order number
+  }
 });
 
 module.exports = Category;
